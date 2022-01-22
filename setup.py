@@ -112,45 +112,6 @@ class BuildExt(build_ext):
         build_ext.build_extensions(self)
 
 
-class Install(install):
-    """ Calls the parser to construct a lex and parse table specific
-        to the system before installation.
-
-    """
-
-    def run(self):
-        try:
-            from enaml.core.parser import write_tables
-            write_tables()
-        except ImportError:
-            pass
-        # Follow logic used in setuptools
-        # cf https://github.com/pypa/setuptools/blob/master/setuptools/command/install.py#L58
-        if self.old_and_unmanageable or self.single_version_externally_managed:
-            return install.run(self)
-
-        if not self._called_from_setup(inspect.currentframe()):
-            # Run in backward-compatibility mode to support bdist_* commands.
-            install.run(self)
-        else:
-            self.do_egg_install()
-
-
-class Develop(develop):
-    """ Calls the parser to construct a lex and parse table specific
-        to the system before installation.
-
-    """
-
-    def run(self):
-        try:
-            from enaml.core.parser import write_tables
-            write_tables()
-        except ImportError:
-            pass
-        develop.run(self)
-
-
 setup(
     name='enaml',
     version=__version__,
@@ -172,10 +133,10 @@ setup(
           'Programming Language :: Python :: Implementation :: CPython',
       ],
     python_requires='>=3.7',
-    requires=['atom', 'qtpy', 'ply', 'kiwisolver'],
+    requires=['atom', 'qtpy', 'pegen', 'kiwisolver'],
     install_requires=['atom>=0.7.0',
                       'kiwisolver>=1.2.0',
-                      'ply>=3.4',
+                      'pegen',
                       "bytecode>=0.11.0"
                       ],
     setup_requires=['cppy>=1.1.0'],
@@ -185,6 +146,7 @@ setup(
     },
     packages=find_packages(),
     package_data={
+        'enaml.core.parser': ["*.gram"],
         'enaml.applib': ['*.enaml'],
         'enaml.stdlib': ['*.enaml'],
         'enaml.workbench.core': ['*.enaml'],
