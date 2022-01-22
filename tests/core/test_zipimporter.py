@@ -15,7 +15,7 @@ from importlib.machinery import ModuleSpec
 
 import pytest
 
-from enaml.core.parser import parse
+from enaml.core.parser import parse_file
 from enaml.core.enaml_compiler import EnamlCompiler
 from enaml.core.import_hooks import MAGIC_NUMBER, make_file_info, EnamlImporter
 from utils import wait_for_window_displayed, is_qt_available
@@ -26,12 +26,8 @@ pytestmark = pytest.mark.skipif(not is_qt_available(),
 
 
 def generate_cache(path):
-    #: Read
-    with open(path, 'r') as f:
-        enaml_code = f.read()
-
     #: Compile
-    ast = parse(enaml_code, filename=path)
+    ast = parse_file(path)
     code = EnamlCompiler.compile(ast, path)
 
     #: Generate cache
