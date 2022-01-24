@@ -7,11 +7,8 @@
 #------------------------------------------------------------------------------
 import os
 import sys
-import inspect
 from setuptools import find_packages, Extension, setup
 from setuptools.command.build_ext import build_ext
-from setuptools.command.install import install
-from setuptools.command.develop import develop
 
 sys.path.insert(0, os.path.abspath('.'))
 from enaml.version import __version__
@@ -126,13 +123,12 @@ setup(
           'License :: OSI Approved :: BSD License',
           'Programming Language :: Python',
           'Programming Language :: Python :: 3',
-          'Programming Language :: Python :: 3.7',
           'Programming Language :: Python :: 3.8',
           'Programming Language :: Python :: 3.9',
           'Programming Language :: Python :: 3.10',
           'Programming Language :: Python :: Implementation :: CPython',
       ],
-    python_requires='>=3.7',
+    python_requires='>=3.8',
     requires=['atom', 'qtpy', 'pegen', 'kiwisolver'],
     install_requires=['atom>=0.7.0',
                       'kiwisolver>=1.2.0',
